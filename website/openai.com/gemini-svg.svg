@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="100%" height="100%" style="background: #090D16; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+  <!-- 选项 A：方案一（数据情报风）- 适配 .cc 优化版 -->
+  <g transform="translate(40, 30)">
+    <rect width="720" height="140" rx="12" fill="#0A192F" stroke="#1E293B" stroke-width="2"/>
+    <text x="20" y="28" fill="#00F2FE" font-size="12" font-weight="bold" letter-spacing="1">FINAL OPTION A: DATA INTEL (数据情报风)</text>
+    
+    <!-- Logo 横版 Header 尺寸 (建议 240x50) -->
+    <g transform="translate(35, 45)">
+      <path d="M 0 35 C 0 15, 15 5, 28 5 L 40 5 C 52 5, 55 18, 40 25 L 15 32 C 0 40, 5 52, 15 52 L 28 52 C 40 52, 55 45, 55 25" fill="none" stroke="url(#blue-grad)" stroke-width="8" stroke-linecap="round"/>
+      <rect x="12" y="25" width="6" height="12" rx="3" fill="#00F2FE"/>
+      <rect x="24" y="16" width="6" height="28" rx="3" fill="#38BDF8"/>
+      <rect x="36" y="28" width="6" height="15" rx="3" fill="#4FACFE"/>
+      
+      <text x="75" y="40" fill="#FFFFFF" font-size="28" font-weight="800" letter-spacing="0.5">SiteIntel<tspan fill="#00F2FE">.cc</tspan></text>
+      <text x="77" y="55" fill="#64748B" font-size="10" letter-spacing="1">WEB INTELLIGENCE &amp; ANALYTICS</text>
+    </g>
+
+    <!-- Favicon 适配版 (32x32 映射) -->
+    <g transform="translate(580, 45)">
+      <text x="45" y="-8" fill="#94A3B8" font-size="11" text-anchor="middle">Favicon 站标</text>
+      <!-- 16x16 / 32x32 极简高亮视网膜适配 -->
+      <rect width="40" height="40" rx="8" fill="#0A192F" stroke="#00F2FE" stroke-width="2"/>
+      <path d="M 10 24 C 10 14, 18 10, 24 14 L 14 22 C 20 28, 28 26, 28 16" fill="none" stroke="#00F2FE" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="26" cy="14" r="2.5" fill="#38BDF8"/>
+    </g>
+  </g>
+
+  <!-- 选项 B：方案三（商业立方体）- 适配 .cc 优化版 -->
+  <g transform="translate(40, 190)">
+    <rect width="720" height="140" rx="12" fill="#0F172A" stroke="#1E293B" stroke-width="2"/>
+    <text x="20" y="28" fill="#3B82F6" font-size="12" font-weight="bold" letter-spacing="1">FINAL OPTION B: BIZ CUBE (商业节点风)</text>
+    
+    <g transform="translate(35, 45)">
+      <g stroke="#3B82F6" stroke-width="2.5" fill="none">
+        <polygon points="25,4 47,16 47,40 25,52 3,40 3,16" fill="#1E3A8A" fill-opacity="0.3"/>
+        <line x1="25" y1="4" x2="25" y2="52"/>
+        <line x1="47" y1="16" x2="25" y2="28"/>
+        <line x1="3" y1="16" x2="25" y2="28"/>
+      </g>
+      <circle cx="25" cy="28" r="3.5" fill="#60A5FA"/>
+
+      <text x="75" y="38" fill="#FFFFFF" font-size="27" font-weight="700" letter-spacing="0.5">SITEINTEL<tspan fill="#3B82F6">.CC</tspan></text>
+      <text x="77" y="54" fill="#64748B" font-size="10" letter-spacing="1.5">ENTERPRISE DATA MONITORING</text>
+    </g>
+
+    <g transform="translate(580, 45)">
+      <text x="45" y="-8" fill="#94A3B8" font-size="11" text-anchor="middle">Favicon 站标</text>
+      <rect width="40" height="40" rx="8" fill="#1E3A8A"/>
+      <polygon points="20,7 32,14 32,26 20,33 8,26 8,14" fill="none" stroke="#60A5FA" stroke-width="2.5"/>
+      <circle cx="20" cy="20" r="3" fill="#FFFFFF"/>
+    </g>
+  </g>
+
+  <!-- 选项 C：方案六（指标盾牌）- 适配 .cc 优化版 -->
+  <g transform="translate(40, 350)">
+    <rect width="720" height="140" rx="12" fill="#0D1520" stroke="#1E293B" stroke-width="2"/>
+    <text x="20" y="28" fill="#10B981" font-size="12" font-weight="bold" letter-spacing="1">FINAL OPTION C: METRIC SHIELD (安全与增长风)</text>
+    
+    <g transform="translate(35, 45)">
+      <path d="M 24 5 L 46 12 V 30 C 46 41, 24 50, 24 50 C 24 50, 2 41, 2 30 V 12 Z" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="2.5"/>
+      <path d="M 11 30 L 18 23 L 26 28 L 36 16" fill="none" stroke="#34D399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <text x="75" y="38" fill="#FFFFFF" font-size="27" font-weight="800">SiteIntel<tspan fill="#10B981">.cc</tspan></text>
+      <text x="77" y="54" fill="#64748B" font-size="10" letter-spacing="1.5">SECURE WEB ASSET MANAGEMENT</text>
+    </g>
+
+    <g transform="translate(580, 45)">
+      <text x="45" y="-8" fill="#94A3B8" font-size="11" text-anchor="middle">Favicon 站标</text>
+      <rect width="40" height="40" rx="8" fill="#10B981"/>
+      <path d="M 10 24 L 16 18 L 23 22 L 30 13" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <defs>
+    <linearGradient id="blue-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="100%" stop-color="#4FACFE"/>
+    </linearGradient>
+  </defs>
+</svg>
