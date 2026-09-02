@@ -313,6 +313,24 @@ section{
   flex-shrink:0;
 }
 
+.nav-cta{
+  font-size:13.5px;
+  font-weight:500;
+  color:var(--bg);
+  background:var(--ink);
+  padding:9px 20px;
+  border-radius:var(--r-pill);
+  transition:
+    background .25s,
+    transform .25s;
+  white-space:nowrap;
+}
+
+.nav-cta:hover{
+  background:#fff;
+  transform:translateY(-1px);
+}
+
 .nav-burger{
   display:none;
   flex-direction:column;
@@ -353,6 +371,11 @@ section{
   padding:13px 0;
   border-bottom:1px solid var(--line-2);
   color:var(--ink);
+}
+
+.mobile-menu a.mm-cta{
+  color:var(--accent);
+  border-bottom:0;
 }
 
 /* ============================================================
@@ -3299,7 +3322,17 @@ g.g-line.on line.on{
         </button>
 
       </div>
-</div>
+
+
+      <a
+        class="nav-cta"
+        href="#ecosystem"
+        data-i18n="nav.enter"
+      >
+        进入天网
+      </a>
+
+    </div>
 
 
     <button
@@ -3377,6 +3410,16 @@ g.g-line.on line.on{
     </div>
 
   </div>
+
+
+  <a
+    class="mm-cta"
+    href="#ecosystem"
+    data-i18n="nav.enter"
+  >
+    进入天网 →
+  </a>
+
 </div>
 
 
@@ -9348,118 +9391,2637 @@ g.g-line.on line.on{
 
   /* ==========================================================
      HERO CANVAS INTELLIGENCE FIELD
-     Interactive TIANNET network field
   ========================================================== */
 
-  (function(){
-    var fieldCanvas = document.getElementById('heroField');
-    if(!fieldCanvas) return;
-    var ctx = fieldCanvas.getContext('2d');
-    if(!ctx) return;
+  var fieldCanvas =
+    document.getElementById(
+      "heroField"
+    );
 
-    var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    var W=0, H=0, dpr=1;
-    var pointer={x:null,y:null};
-    var nodes=[];
-    var MAX_LINK_DISTANCE=135;
-    var POINTER_RADIUS=175;
-    var TYPES=['WEBSITE','DOMAIN','ENTITY','RELATION','IP','DNS','TECH','ASN','CERTIFICATE','INFRASTRUCTURE','PLATFORM','EVENT','DISCOVERY','INTELLIGENCE'];
 
-    function rnd(lo,hi){ return lo+Math.random()*(hi-lo); }
-    function nodeCount(){
-      if(W<700) return 44;
-      if(W<1100) return 70;
-      return Math.min(128,Math.max(76,Math.floor((W*H)/11000)));
-    }
-    function makeNode(){
-      return {x:rnd(0,W),y:rnd(0,H),vx:rnd(-.12,.12),vy:rnd(-.10,.10),r:rnd(1.2,2.8),alpha:rnd(.20,.62),pulse:rnd(0,Math.PI*2),type:TYPES[Math.floor(Math.random()*TYPES.length)]};
-    }
-    function seed(){
-      nodes=[];
-      for(var i=0;i<nodeCount();i++) nodes.push(makeNode());
-    }
-    function resize(){
-      var rect=fieldCanvas.getBoundingClientRect();
-      W=Math.max(rect.width,10);
-      H=Math.max(rect.height,10);
-      dpr=Math.min(window.devicePixelRatio||1,2);
-      fieldCanvas.width=Math.round(W*dpr);
-      fieldCanvas.height=Math.round(H*dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      seed();
-    }
-    function updateNode(n){
-      n.x+=n.vx; n.y+=n.vy; n.pulse+=.012;
-      n.vx+=Math.sin(n.pulse)*.0008;
-      n.vy+=Math.cos(n.pulse*.8)*.0006;
-      if(pointer.x!==null&&pointer.y!==null){
-        var dx=n.x-pointer.x,dy=n.y-pointer.y,dist=Math.hypot(dx,dy);
-        if(dist>0&&dist<POINTER_RADIUS){
-          var force=(1-dist/POINTER_RADIUS)*.012;
-          n.vx+=(dx/dist)*force;
-          n.vy+=(dy/dist)*force;
-        }
+  if(
+    fieldCanvas &&
+    !isMobile &&
+    !reduceMotion
+  ){
+
+    var ctx =
+      fieldCanvas.getContext(
+        "2d"
+      );
+
+
+    var W = 0;
+    var H = 0;
+    var dpr = 1;
+
+
+    var TYPES = [
+
+      {
+        t:"DOMAIN",
+        w:76,
+        v:"example.com"
+      },
+
+      {
+        t:"DNS",
+        w:58,
+        v:"Cloudflare"
+      },
+
+      {
+        t:"CERTIFICATE",
+        w:110,
+        v:"Let's Encrypt"
+      },
+
+      {
+        t:"ORGANIZATION",
+        w:116,
+        v:"Edgecast Networks"
+      },
+
+      {
+        t:"IP",
+        w:44,
+        v:"93.184.216.34"
+      },
+
+      {
+        t:"ASN",
+        w:56,
+        v:"AS15133"
+      },
+
+      {
+        t:"WEBSITE",
+        w:76,
+        v:"SiteIntel"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"nginx"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"React"
+      },
+
+      {
+        t:"SOCIAL",
+        w:64,
+        v:"3 links"
+      },
+
+      {
+        t:"CERTIFICATE",
+        w:110,
+        v:"Let's Encrypt"
+      },
+
+      {
+        t:"DNS",
+        w:58,
+        v:"AliDNS"
+      },
+
+      {
+        t:"DOMAIN",
+        w:76,
+        v:"www.example.com"
+      },
+
+      {
+        t:"WEBSITE",
+        w:76,
+        v:"MANGZHUO"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"Cloudflare"
+      },
+
+      {
+        t:"IP",
+        w:44,
+        v:"1.2.3.4"
+      },
+
+      {
+        t:"ASN",
+        w:56,
+        v:"AS4134"
+      },
+
+      {
+        t:"ORGANIZATION",
+        w:116,
+        v:"Tiannet"
+      },
+
+      {
+        t:"DOMAIN",
+        w:76,
+        v:"TianNet.cn"
+      },
+
+      {
+        t:"WEBSITE",
+        w:76,
+        v:"DUONIU"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"JavaScript"
+      },
+
+      {
+        t:"DNS",
+        w:58,
+        v:"DNSPod"
+      },
+
+      {
+        t:"IP",
+        w:44,
+        v:"8.8.8.8"
+      },
+
+      {
+        t:"CERTIFICATE",
+        w:110,
+        v:"DigiCert"
+      },
+
+      {
+        t:"ORGANIZATION",
+        w:116,
+        v:"Example Org"
+      },
+
+      {
+        t:"ASN",
+        w:56,
+        v:"AS15169"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"Docker"
+      },
+
+      {
+        t:"DOMAIN",
+        w:76,
+        v:"cdn.example.com"
+      },
+
+      {
+        t:"WEBSITE",
+        w:76,
+        v:"SiteIntel"
+      },
+
+      {
+        t:"TECHNOLOGY",
+        w:100,
+        v:"Vue"
       }
-      n.vx*=.994; n.vy*=.994;
-      if(n.x<-20) n.x=W+20;
-      if(n.x>W+20) n.x=-20;
-      if(n.y<-20) n.y=H+20;
-      if(n.y>H+20) n.y=-20;
+
+    ];
+
+
+    var nodes = [];
+    var links = [];
+
+
+    function rnd(lo,hi){
+      return (
+        lo +
+        Math.random() *
+        (hi-lo)
+      );
     }
-    function drawPointer(){
-      if(pointer.x===null||pointer.y===null) return;
-      var g=ctx.createRadialGradient(pointer.x,pointer.y,0,pointer.x,pointer.y,POINTER_RADIUS);
-      g.addColorStop(0,'rgba(59,130,246,.055)');
-      g.addColorStop(.35,'rgba(59,130,246,.022)');
-      g.addColorStop(1,'rgba(59,130,246,0)');
-      ctx.fillStyle=g; ctx.beginPath();
-      ctx.arc(pointer.x,pointer.y,POINTER_RADIUS,0,Math.PI*2); ctx.fill();
+
+
+    var cardSafe = null;
+
+
+    function measureCardSafe(){
+
+      var card =
+        document.querySelector(
+          ".observe"
+        );
+
+
+      if(!card){
+        return null;
+      }
+
+
+      var cRect =
+        card.getBoundingClientRect();
+
+      var fRect =
+        fieldCanvas.getBoundingClientRect();
+
+
+      var pad = 24;
+
+
+      var zone = {
+
+        x1:
+          cRect.left -
+          fRect.left -
+          pad,
+
+        y1:
+          cRect.top -
+          fRect.top -
+          pad,
+
+        x2:
+          cRect.right -
+          fRect.left +
+          pad,
+
+        y2:
+          cRect.bottom -
+          fRect.top +
+          pad
+
+      };
+
+
+      if(
+        zone.x2 <= zone.x1 ||
+        zone.y2 <= zone.y1
+      ){
+
+        return null;
+
+      }
+
+
+      return zone;
+
     }
-    function drawLinks(){
-      for(var i=0;i<nodes.length;i++){
-        var a=nodes[i];
-        for(var j=i+1;j<nodes.length;j++){
-          var b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
-          if(dist>MAX_LINK_DISTANCE) continue;
-          var opacity=(1-dist/MAX_LINK_DISTANCE)*.13,boost=0;
-          if(pointer.x!==null&&pointer.y!==null){
-            var da=Math.hypot(a.x-pointer.x,a.y-pointer.y);
-            var db=Math.hypot(b.x-pointer.x,b.y-pointer.y);
-            if(da<POINTER_RADIUS||db<POINTER_RADIUS) boost=.24;
+
+
+    function inCardSafe(x,y){
+
+      if(!cardSafe){
+        return false;
+      }
+
+
+      return (
+        x >= cardSafe.x1 &&
+        x <= cardSafe.x2 &&
+        y >= cardSafe.y1 &&
+        y <= cardSafe.y2
+      );
+
+    }
+
+
+    function edgeHitsSafe(a,b){
+
+      if(!cardSafe){
+        return false;
+      }
+
+
+      var p = cardSafe;
+
+
+      var ex =
+        b.x -
+        a.x;
+
+
+      var ey =
+        b.y -
+        a.y;
+
+
+      var denom =
+        ex*ex +
+        ey*ey;
+
+
+      if(denom === 0){
+
+        return inCardSafe(
+          a.x,
+          a.y
+        );
+
+      }
+
+
+      var t =
+        (
+          (p.x1-a.x)*ex +
+          (p.y1-a.y)*ey
+        ) /
+        denom;
+
+
+      t =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            t
+          )
+        );
+
+
+      var cx =
+        a.x +
+        ex*t;
+
+
+      var cy =
+        a.y +
+        ey*t;
+
+
+      var near =
+        Math.min(
+
+          Math.hypot(
+            cx-p.x1,
+            cy-p.y1
+          ),
+
+          Math.hypot(
+            cx-p.x2,
+            cy-p.y1
+          ),
+
+          Math.hypot(
+            cx-p.x1,
+            cy-p.y2
+          ),
+
+          Math.hypot(
+            cx-p.x2,
+            cy-p.y2
+          )
+
+        );
+
+
+      return near <= 28;
+
+    }
+
+
+    function seedField(){
+
+      nodes = [];
+      links = [];
+
+
+      var pad = 90;
+
+
+      cardSafe =
+        measureCardSafe();
+
+
+      for(
+        var i=0;
+        i<TYPES.length;
+        i++
+      ){
+
+        var nx;
+        var ny;
+        var guard = 0;
+
+
+        do{
+
+          nx =
+            rnd(
+              pad,
+              W-pad
+            );
+
+          ny =
+            rnd(
+              pad,
+              H-pad
+            );
+
+          guard++;
+
+        }while(
+          inCardSafe(
+            nx,
+            ny
+          ) &&
+          guard<40
+        );
+
+
+        nodes.push({
+
+          id:i,
+
+          x:nx,
+          y:ny,
+
+          ox:0,
+          oy:0,
+
+          type:TYPES[i].t,
+
+          label:TYPES[i].v,
+
+          rad:
+            3 +
+            Math.random()*1.6
+
+        });
+
+      }
+
+
+      var count = 42;
+
+
+      for(
+        i=0;
+        i<count;
+        i++
+      ){
+
+        var a =
+          Math.floor(
+            Math.random() *
+            nodes.length
+          );
+
+
+        var b =
+          Math.floor(
+            Math.random() *
+            nodes.length
+          );
+
+
+        if(a===b){
+          continue;
+        }
+
+
+        if(
+          links.some(
+            function(l){
+
+              return (
+                l.a===a &&
+                l.b===b
+              ) || (
+                l.a===b &&
+                l.b===a
+              );
+
+            }
+          )
+        ){
+
+          continue;
+
+        }
+
+
+        var na =
+          nodes[a];
+
+        var nb =
+          nodes[b];
+
+
+        var d =
+          Math.hypot(
+            nb.x-na.x,
+            nb.y-na.y
+          );
+
+
+        if(d>520){
+          continue;
+        }
+
+
+        if(
+          edgeHitsSafe(
+            na,
+            nb
+          )
+        ){
+
+          continue;
+
+        }
+
+
+        links.push({
+          a:a,
+          b:b
+        });
+
+      }
+
+
+      if(
+        links.length<25
+      ){
+
+        for(
+          i=links.length;
+          i<30;
+          i++
+        ){
+
+          var a2 =
+            Math.floor(
+              Math.random() *
+              nodes.length
+            );
+
+          var b2 =
+            Math.floor(
+              Math.random() *
+              nodes.length
+            );
+
+
+          if(
+            a2!==b2
+          ){
+
+            links.push({
+              a:a2,
+              b:b2
+            });
+
           }
-          opacity=Math.min(.5,opacity+boost);
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-          ctx.strokeStyle='rgba(100,140,195,'+opacity.toFixed(3)+')';
-          ctx.lineWidth=boost>0?.85:.55; ctx.stroke();
+
         }
+
       }
+
     }
-    function drawNodes(){
-      for(var i=0;i<nodes.length;i++){
-        var n=nodes[i],radius=n.r*(1+Math.sin(n.pulse)*.12);
-        var blue=n.type==='DOMAIN'||n.type==='ENTITY'||n.type==='RELATION'||n.type==='DISCOVERY'||n.type==='INTELLIGENCE';
-        ctx.beginPath(); ctx.arc(n.x,n.y,radius,0,Math.PI*2);
-        ctx.fillStyle=blue?'rgba(96,165,250,'+n.alpha+')':'rgba(244,244,242,'+(n.alpha*.72)+')';
-        ctx.fill();
+
+
+    var pointer = {
+
+      x:-9999,
+      y:-9999,
+      inside:false
+
+    };
+
+
+    function onMove(e){
+
+      var rect =
+        fieldCanvas.getBoundingClientRect();
+
+
+      pointer.x =
+        e.clientX -
+        rect.left;
+
+
+      pointer.y =
+        e.clientY -
+        rect.top;
+
+
+      pointer.inside =
+        true;
+
+    }
+
+
+    function onLeave(){
+
+      pointer.x = -9999;
+      pointer.y = -9999;
+      pointer.inside = false;
+
+    }
+
+
+    function resize(){
+
+      var rect =
+        fieldCanvas.getBoundingClientRect();
+
+
+      dpr =
+        Math.min(
+          window.devicePixelRatio ||
+          1,
+          2
+        );
+
+
+      W =
+        Math.max(
+          rect.width,
+          10
+        );
+
+
+      H =
+        Math.max(
+          rect.height,
+          10
+        );
+
+
+      fieldCanvas.width =
+        Math.round(
+          W*dpr
+        );
+
+
+      fieldCanvas.height =
+        Math.round(
+          H*dpr
+        );
+
+
+      ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+      );
+
+
+      cardSafe =
+        measureCardSafe();
+
+
+      seedField();
+
+
+      draw();
+
+    }
+
+
+    function highlightFor(mx,my){
+
+      var best = -1;
+
+      var bestD = 220;
+
+
+      for(
+        var i=0;
+        i<nodes.length;
+        i++
+      ){
+
+        var n =
+          nodes[i];
+
+
+        var d =
+          Math.hypot(
+            n.x-mx,
+            n.y-my
+          );
+
+
+        if(d<bestD){
+
+          bestD = d;
+          best = i;
+
+        }
+
       }
+
+
+      if(best<0){
+
+        return {
+          active:[],
+          edges:[]
+        };
+
+      }
+
+
+      var active=[best];
+      var edges=[];
+      var second=[];
+
+
+      for(
+        var j=0;
+        j<links.length;
+        j++
+      ){
+
+        var l =
+          links[j];
+
+
+        var nearA =
+          l.a===best;
+
+        var nearB =
+          l.b===best;
+
+
+        if(
+          nearA ||
+          nearB
+        ){
+
+          edges.push(j);
+
+
+          if(nearA){
+            second.push(
+              l.b
+            );
+          }
+
+
+          if(nearB){
+            second.push(
+              l.a
+            );
+          }
+
+        }
+
+      }
+
+
+      var secondSet =
+        second.filter(
+          function(v,idx){
+
+            return (
+              second.indexOf(v)===idx
+            );
+
+          }
+        );
+
+
+      var finalSet =
+        secondSet.slice();
+
+
+      for(
+        var k=0;
+        k<links.length;
+        k++
+      ){
+
+        var l2 =
+          links[k];
+
+
+        if(
+          finalSet.indexOf(l2.a)>-1 &&
+          active.indexOf(l2.b)===-1
+        ){
+
+          finalSet.push(
+            l2.b
+          );
+
+        }else if(
+          finalSet.indexOf(l2.b)>-1 &&
+          active.indexOf(l2.a)===-1
+        ){
+
+          finalSet.push(
+            l2.a
+          );
+
+        }
+
+      }
+
+
+      active =
+        active.concat(
+          finalSet
+        );
+
+
+      return {
+        active:active,
+        edges:edges
+      };
+
     }
+
+
+    var tooltip = null;
+    var tooltipTarget=-1;
+
+
+    function ensureTooltip(){
+
+      if(tooltip){
+        return;
+      }
+
+
+      tooltip =
+        document.createElement(
+          "div"
+        );
+
+
+      tooltip.className =
+        "field-tip";
+
+
+      fieldCanvas.parentNode.appendChild(
+        tooltip
+      );
+
+    }
+
+
+    function hideTooltip(){
+
+      if(!tooltip){
+        return;
+      }
+
+
+      tooltip.classList.remove(
+        "show"
+      );
+
+
+      tooltipTarget=-1;
+
+    }
+
+
+    function typePriority(t){
+
+      if(t==="DOMAIN") return 0;
+      if(t==="IP") return 1;
+      if(t==="CERTIFICATE") return 2;
+      if(t==="ORGANIZATION") return 3;
+      if(t==="DNS") return 4;
+      if(t==="ASN") return 5;
+      if(t==="WEBSITE") return 6;
+      if(t==="TECHNOLOGY") return 7;
+      if(t==="SOCIAL") return 8;
+
+      return 9;
+
+    }
+
+
+    function updateTooltip(){
+
+      ensureTooltip();
+
+
+      var target =
+        tooltipTarget;
+
+
+      if(
+        target<0 ||
+        tooltipTarget<0
+      ){
+
+        hideTooltip();
+
+        return;
+
+      }
+
+
+      var n =
+        nodes[target];
+
+
+      tooltip.textContent =
+        n.type +
+        " — " +
+        n.label;
+
+
+      tooltip.style.left =
+        "0px";
+
+
+      tooltip.style.top =
+        "0px";
+
+
+      tooltip.classList.add(
+        "show"
+      );
+
+
+      var tw =
+        tooltip.offsetWidth;
+
+      var th =
+        tooltip.offsetHeight;
+
+      var pad=10;
+
+
+      var hrTop=0;
+      var hrBottom=0;
+
+
+      var heroH1 =
+        document.querySelector(
+          ".hero h1"
+        );
+
+
+      if(heroH1){
+
+        var hr =
+          heroH1.getBoundingClientRect();
+
+
+        var cRect =
+          fieldCanvas.getBoundingClientRect();
+
+
+        hrTop =
+          hr.top-cRect.top;
+
+
+        hrBottom =
+          hr.bottom-cRect.top;
+
+      }
+
+
+      var candY =
+        Math.min(
+          n.y-th-12,
+          H-th-pad
+        );
+
+
+      var candX =
+        Math.min(
+          n.x+20,
+          W-tw-pad
+        );
+
+
+      if(candX<pad){
+        candX=pad;
+      }
+
+
+      var cands=[];
+
+
+      if(hrBottom>0){
+
+        var a =
+          Math.max(
+            pad,
+            n.x-tw/2
+          );
+
+
+        if(
+          a+tw>
+          W-pad
+        ){
+
+          a =
+            Math.max(
+              pad,
+              W-tw-pad
+            );
+
+        }
+
+
+        cands.push([
+
+          a,
+
+          Math.max(
+            hrBottom+12,
+            Math.min(
+              n.y+24,
+              H-th-pad
+            )
+          )
+
+        ]);
+
+
+        cands.push([
+          a,
+          candY
+        ]);
+
+      }
+
+
+      cands.push([
+        candX,
+        candY
+      ]);
+
+
+      for(
+        var ci=0;
+        ci<cands.length;
+        ci++
+      ){
+
+        var cx =
+          cands[ci][0];
+
+        var cy =
+          cands[ci][1];
+
+
+        if(
+          cx<pad ||
+          cx+tw>
+          W-pad
+        ){
+
+          continue;
+
+        }
+
+
+        if(
+          cy<pad ||
+          cy+th>
+          H-pad
+        ){
+
+          continue;
+
+        }
+
+
+        if(
+          hrBottom>0 &&
+          cy<hrBottom &&
+          cy+th>hrTop
+        ){
+
+          continue;
+
+        }
+
+
+        tooltip.style.left =
+          cx+"px";
+
+
+        tooltip.style.top =
+          cy+"px";
+
+
+        return;
+
+      }
+
+
+      tooltip.style.left =
+        candX+"px";
+
+
+      tooltip.style.top =
+        candY+"px";
+
+    }
+
+
+    var lastTarget=-1;
+
+
     function draw(){
-      ctx.clearRect(0,0,W,H);
-      drawPointer(); drawLinks(); drawNodes();
-      if(reduce) return;
-      nodes.forEach(updateNode);
-      requestAnimationFrame(draw);
+
+      if(
+        document.visibilityState===
+        "hidden"
+      ){
+
+        return;
+
+      }
+
+
+      ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+      );
+
+
+      var h =
+        highlightFor(
+          pointer.x,
+          pointer.y
+        );
+
+
+      for(
+        var i=0;
+        i<links.length;
+        i++
+      ){
+
+        var l =
+          links[i];
+
+
+        var isEdge =
+          h.edges.indexOf(i)>-1;
+
+
+        var base =
+          .06 +
+          (i%5)*.015;
+
+
+        var op =
+          isEdge
+          ? .42
+          : base;
+
+
+        ctx.strokeStyle =
+          "rgba(148,163,184," +
+          op.toFixed(3) +
+          ")";
+
+
+        ctx.lineWidth =
+          isEdge
+          ? 1.3
+          : .7;
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+          nodes[l.a].x,
+          nodes[l.a].y
+        );
+
+
+        ctx.lineTo(
+          nodes[l.b].x,
+          nodes[l.b].y
+        );
+
+
+        ctx.stroke();
+
+      }
+
+
+      var nearest=-1;
+
+
+      if(pointer.inside){
+
+        var best=-1;
+        var bestD=220;
+
+
+        for(
+          i=0;
+          i<nodes.length;
+          i++
+        ){
+
+          var d =
+            Math.hypot(
+              nodes[i].x-pointer.x,
+              nodes[i].y-pointer.y
+            );
+
+
+          if(d<bestD){
+
+            bestD=d;
+            best=i;
+
+          }
+
+        }
+
+
+        if(best>-1){
+
+          var byType={};
+
+
+          for(
+            i=0;
+            i<nodes.length;
+            i++
+          ){
+
+            var dd =
+              Math.hypot(
+                nodes[i].x-pointer.x,
+                nodes[i].y-pointer.y
+              );
+
+
+            var tv =
+              nodes[i].type;
+
+
+            if(dd<180){
+
+              if(
+                !(tv in byType) ||
+                dd<byType[tv].d
+              ){
+
+                byType[tv]={
+                  i:i,
+                  d:dd
+                };
+
+              }
+
+            }
+
+          }
+
+
+          var keys =
+            Object.keys(
+              byType
+            );
+
+
+          if(keys.length>1){
+
+            keys.sort(
+              function(a,b){
+
+                var pa =
+                  typePriority(a);
+
+                var pb =
+                  typePriority(b);
+
+
+                if(pa!==pb){
+
+                  return pa-pb;
+
+                }
+
+
+                return (
+                  byType[a].d -
+                  byType[b].d
+                );
+
+              }
+            );
+
+
+            best =
+              byType[
+                keys[0]
+              ].i;
+
+          }
+
+
+          nearest=best;
+          tooltipTarget=best;
+
+        }else{
+
+          tooltipTarget=-1;
+
+        }
+
+      }else{
+
+        tooltipTarget=-1;
+
+      }
+
+
+      if(
+        tooltipTarget !==
+        lastTarget
+      ){
+
+        if(
+          tooltipTarget===-1
+        ){
+
+          hideTooltip();
+
+        }else{
+
+          updateTooltip();
+
+        }
+
+
+        lastTarget =
+          tooltipTarget;
+
+      }
+
+
+      for(
+        i=0;
+        i<nodes.length;
+        i++
+      ){
+
+        var n =
+          nodes[i];
+
+
+        var inActive =
+          h.active.indexOf(i)>-1;
+
+
+        var isNearest =
+          i===nearest;
+
+
+        if(!inActive){
+
+          n.ox +=
+            (0-n.ox)*
+            .08;
+
+          n.oy +=
+            (0-n.oy)*
+            .08;
+
+        }else if(isNearest){
+
+          n.ox +=
+            (
+              n.rad*.9-
+              n.ox
+            )*.08;
+
+          n.oy +=
+            (0-n.oy)*
+            .08;
+
+        }else{
+
+          n.ox +=
+            (
+              n.rad*.42-
+              n.ox
+            )*.08;
+
+          n.oy +=
+            (0-n.oy)*
+            .08;
+
+        }
+
+
+        var baseOp =
+          .18+
+          (n.id%6)*
+          .028;
+
+
+        var op =
+          inActive
+          ? .92
+          : baseOp;
+
+
+        var scale =
+          1+
+          (
+            n.ox/
+            Math.max(
+              n.rad,
+              .1
+            )
+          )*.06;
+
+
+        var isType =
+          n.type==="DOMAIN" ||
+          n.type==="IP" ||
+          n.type==="CERTIFICATE" ||
+          n.type==="ORGANIZATION";
+
+
+        if(isType){
+
+          ctx.fillStyle =
+            "rgba(96,165,250," +
+            (
+              op*.85
+            ).toFixed(3) +
+            ")";
+
+        }else{
+
+          ctx.fillStyle =
+            "rgba(244,244,242," +
+            op.toFixed(3) +
+            ")";
+
+        }
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+          n.x,
+          n.y,
+          n.rad*scale,
+          0,
+          Math.PI*2
+        );
+
+
+        ctx.fill();
+
+
+        ctx.font =
+          "10.5px " +
+          getComputedStyle(
+            document.body
+          ).fontFamily;
+
+
+        ctx.textAlign=
+          "center";
+
+
+        ctx.fillStyle =
+          isType
+          ? "rgba(147,197,253," +
+            (
+              op*.85
+            ).toFixed(3) +
+            ")"
+          : "rgba(166,166,160," +
+            (
+              op*.9
+            ).toFixed(3) +
+            ")";
+
+
+        ctx.fillText(
+          n.type,
+          n.x,
+          n.y+
+          n.rad*scale+
+          12
+        );
+
+      }
+
+
+      requestAnimationFrame(
+        draw
+      );
+
     }
-    function move(e){
-      var rect=fieldCanvas.getBoundingClientRect();
-      pointer.x=e.clientX-rect.left; pointer.y=e.clientY-rect.top;
+
+
+    var fieldTicking=false;
+
+
+    function scheduleDraw(){
+
+      if(fieldTicking){
+        return;
+      }
+
+
+      fieldTicking=true;
+
+
+      requestAnimationFrame(
+        function(){
+
+          fieldTicking=false;
+
+          draw();
+
+        }
+      );
+
     }
-    function leave(){ pointer.x=null; pointer.y=null; }
-    fieldCanvas.addEventListener('pointermove',move,{passive:true});
-    fieldCanvas.addEventListener('pointerleave',leave,{passive:true});
-    window.addEventListener('resize',resize);
-    resize(); fieldCanvas.classList.add('on'); draw();
-  })();
+
+
+    function onScrollCheck(){
+
+      if(
+        document.visibilityState===
+        "hidden"
+      ){
+
+        return;
+
+      }
+
+
+      var rect =
+        fieldCanvas.getBoundingClientRect();
+
+
+      if(
+        rect.bottom>0 &&
+        rect.top<
+        window.innerHeight
+      ){
+
+        scheduleDraw();
+
+      }
+
+    }
+
+
+    resize();
+
+
+    window.addEventListener(
+      "resize",
+      resize
+    );
+
+
+    fieldCanvas.parentNode.addEventListener(
+      "pointermove",
+      onMove
+    );
+
+
+    fieldCanvas.parentNode.addEventListener(
+      "pointerleave",
+      onLeave
+    );
+
+
+    window.addEventListener(
+      "scroll",
+      onScrollCheck,
+      {passive:true}
+    );
+
+
+    setTimeout(
+      function(){
+
+        fieldCanvas.classList.add(
+          "on"
+        );
+
+        onScrollCheck();
+
+      },
+      120
+    );
+
+
+    document.addEventListener(
+      "visibilitychange",
+      function(){
+
+        if(
+          document.visibilityState===
+          "hidden"
+        ){
+
+          hideTooltip();
+
+        }else{
+
+          onScrollCheck();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* ==========================================================
+     STATIC ENTITY GRAPH HOVER
+  ========================================================== */
+
+  var graphSvgs =
+    document.querySelectorAll(
+      "#graph svg, #graph2 svg"
+    );
+
+
+  graphSvgs.forEach(
+    function(svg){
+
+      var groups =
+        svg.querySelectorAll(
+          "g"
+        );
+
+
+      var dots=[];
+
+      var allLines =
+        svg.querySelectorAll(
+          "line"
+        );
+
+
+      groups.forEach(
+        function(g){
+
+          var dot =
+            g.querySelector(
+              "circle[data-node]"
+            );
+
+
+          if(dot){
+
+            dots.push({
+
+              el:g,
+              dot:dot,
+
+              name:
+                dot.getAttribute(
+                  "data-node"
+                )
+
+            });
+
+          }
+
+        }
+      );
+
+
+      if(
+        dots.length<2
+      ){
+
+        return;
+
+      }
+
+
+      function lineKey(p){
+
+        var parts =
+          p.split(",");
+
+
+        var x =
+          parseInt(
+            parts[0],
+            10
+          );
+
+
+        var y =
+          parseInt(
+            parts[1],
+            10
+          );
+
+
+        return (
+          x+
+          "|" +
+          y
+        );
+
+      }
+
+
+      var byPos={};
+
+
+      dots.forEach(
+        function(d){
+
+          var p =
+            d.dot.getAttribute(
+              "cx"
+            )+
+            ","+
+            d.dot.getAttribute(
+              "cy"
+            );
+
+
+          byPos[
+            lineKey(p)
+          ] = d;
+
+        }
+      );
+
+
+      function reset(){
+
+        dots.forEach(
+          function(d){
+
+            d.dot.classList.remove(
+              "on"
+            );
+
+            d.dot.classList.remove(
+              "near"
+            );
+
+          }
+        );
+
+
+        allLines.forEach(
+          function(l){
+
+            l.classList.remove(
+              "on"
+            );
+
+          }
+        );
+
+      }
+
+
+      var hoverTimer=null;
+
+
+      dots.forEach(
+        function(d){
+
+          d.el.addEventListener(
+            "mouseenter",
+            function(){
+
+              clearTimeout(
+                hoverTimer
+              );
+
+
+              reset();
+
+
+              var pos =
+                lineKey(
+                  d.dot.getAttribute(
+                    "cx"
+                  )+
+                  ","+
+                  d.dot.getAttribute(
+                    "cy"
+                  )
+                );
+
+
+              var connected=[];
+
+
+              allLines.forEach(
+                function(line){
+
+                  var p1 =
+                    line.getAttribute(
+                      "x1"
+                    )+
+                    ","+
+                    line.getAttribute(
+                      "y1"
+                    );
+
+
+                  var p2 =
+                    line.getAttribute(
+                      "x2"
+                    )+
+                    ","+
+                    line.getAttribute(
+                      "y2"
+                    );
+
+
+                  var k1 =
+                    lineKey(p1);
+
+                  var k2 =
+                    lineKey(p2);
+
+
+                  var otherPos=null;
+
+
+                  if(k1===pos){
+
+                    line.classList.add(
+                      "on"
+                    );
+
+                    otherPos=k2;
+
+                  }else if(
+                    k2===pos
+                  ){
+
+                    line.classList.add(
+                      "on"
+                    );
+
+                    otherPos=k1;
+
+                  }
+
+
+                  if(otherPos){
+
+                    var other =
+                      byPos[
+                        otherPos
+                      ];
+
+
+                    if(other){
+
+                      connected.push(
+                        other
+                      );
+
+                    }
+
+                  }
+
+                }
+              );
+
+
+              connected.forEach(
+                function(o){
+
+                  o.dot.classList.add(
+                    "on"
+                  );
+
+
+                  var op =
+                    lineKey(
+                      o.dot.getAttribute(
+                        "cx"
+                      )+
+                      ","+
+                      o.dot.getAttribute(
+                        "cy"
+                      )
+                    );
+
+
+                  allLines.forEach(
+                    function(line){
+
+                      var p1 =
+                        line.getAttribute(
+                          "x1"
+                        )+
+                        ","+
+                        line.getAttribute(
+                          "y1"
+                        );
+
+
+                      var p2 =
+                        line.getAttribute(
+                          "x2"
+                        )+
+                        ","+
+                        line.getAttribute(
+                          "y2"
+                        );
+
+
+                      var k1 =
+                        lineKey(p1);
+
+                      var k2 =
+                        lineKey(p2);
+
+
+                      if(
+                        k1===op ||
+                        k2===op
+                      ){
+
+                        line.classList.add(
+                          "on"
+                        );
+
+                      }
+
+                    }
+                  );
+
+                }
+              );
+
+
+              d.dot.classList.add(
+                "on"
+              );
+
+
+              d.dot.classList.add(
+                "near"
+              );
+
+
+              hoverTimer =
+                setTimeout(
+                  function(){
+
+                    reset();
+
+                  },
+                  1800
+                );
+
+            }
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ==========================================================
+     INTERNET INTELLIGENCE MAP
+  ========================================================== */
+
+  var mapCanvas =
+    document.getElementById(
+      "mapCanvas"
+    );
+
+  var mapSearch =
+    document.getElementById(
+      "mapSearch"
+    );
+
+  var mapCrumb =
+    document.getElementById(
+      "mapCrumb"
+    );
+
+  var mapRoot =
+    document.getElementById(
+      "mapRoot"
+    );
+
+  var mapCats =
+    document.querySelectorAll(
+      "#mapBranch .map-cat"
+    );
+
+
+  if(
+    mapCanvas &&
+    mapCats.length
+  ){
+
+    var openCat=null;
+    var crumbPath=[];
+
+
+    function closeAll(){
+
+      mapCats.forEach(
+        function(c){
+
+          c.classList.remove(
+            "open"
+          );
+
+          c.classList.remove(
+            "active"
+          );
+
+
+          c.querySelectorAll(
+            ".map-sub"
+          ).forEach(
+            function(sub){
+
+              sub.classList.remove(
+                "visible"
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    function showCat(cat){
+
+      if(!cat){
+        return;
+      }
+
+
+      closeAll();
+
+
+      cat.classList.add(
+        "active"
+      );
+
+
+      cat.querySelectorAll(
+        ".map-sub"
+      ).forEach(
+        function(sub,idx){
+
+          setTimeout(
+            function(){
+
+              sub.classList.add(
+                "visible"
+              );
+
+            },
+            35+
+            idx*35
+          );
+
+        }
+      );
+
+
+      openCat=cat;
+
+    }
+
+
+    function openCatEl(cat){
+
+      if(!cat){
+        return;
+      }
+
+
+      showCat(cat);
+
+
+      cat.classList.add(
+        "open"
+      );
+
+    }
+
+
+    function clearSearch(){
+
+      if(mapSearch){
+
+        mapSearch.value="";
+
+      }
+
+
+      mapCats.forEach(
+        function(c){
+
+          c.classList.remove(
+            "hit",
+            "dim"
+          );
+
+
+          c.querySelectorAll(
+            ".map-sub"
+          ).forEach(
+            function(sub){
+
+              sub.classList.remove(
+                "hit"
+              );
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    function renderCrumb(){
+
+      if(!mapCrumb){
+        return;
+      }
+
+
+      mapCrumb.innerHTML="";
+
+
+      var home =
+        document.createElement(
+          "button"
+        );
+
+
+      home.type="button";
+
+      home.className =
+        "crumb" +
+        (
+          crumbPath.length===0
+          ? " active"
+          : ""
+        );
+
+
+      home.textContent =
+        "TIANNET";
+
+
+      home.addEventListener(
+        "click",
+        function(){
+
+          crumbPath=[];
+
+          closeAll();
+
+          clearSearch();
+
+          renderCrumb();
+
+        }
+      );
+
+
+      mapCrumb.appendChild(
+        home
+      );
+
+
+      if(
+        crumbPath.length>0
+      ){
+
+        var cat =
+          document.createElement(
+            "span"
+          );
+
+
+        cat.className =
+          "crumb active";
+
+
+        cat.textContent =
+          crumbPath[
+            crumbPath.length-1
+          ];
+
+
+        mapCrumb.appendChild(
+          cat
+        );
+
+      }
+
+    }
+
+
+    mapCats.forEach(
+      function(cat){
+
+        var head =
+          cat.querySelector(
+            ".map-cat-head"
+          );
+
+
+        cat.addEventListener(
+          "mouseenter",
+          function(){
+
+            if(
+              window.innerWidth>768
+            ){
+
+              showCat(cat);
+
+            }
+
+          }
+        );
+
+
+        head.addEventListener(
+          "click",
+          function(){
+
+            if(
+              window.innerWidth<=768
+            ){
+
+              if(
+                cat.classList.contains(
+                  "active"
+                )
+              ){
+
+                closeAll();
+
+                crumbPath=[];
+
+              }else{
+
+                openCatEl(
+                  cat
+                );
+
+                crumbPath=[
+                  cat.getAttribute(
+                    "data-cat"
+                  )
+                ];
+
+              }
+
+              renderCrumb();
+
+              return;
+
+            }
+
+
+            openCatEl(cat);
+
+
+            crumbPath=[
+              cat.getAttribute(
+                "data-cat"
+              )
+            ];
+
+
+            renderCrumb();
+
+          }
+        );
+
+      }
+    );
+
+
+    if(mapRoot){
+
+      mapRoot.addEventListener(
+        "click",
+        function(){
+
+          crumbPath=[];
+
+          closeAll();
+
+          clearSearch();
+
+          renderCrumb();
+
+        }
+      );
+
+    }
+
+
+    function normalize(v){
+
+      return String(
+        v || ""
+      )
+      .toLowerCase()
+      .trim();
+
+    }
+
+
+    if(mapSearch){
+
+      mapSearch.addEventListener(
+        "input",
+        function(){
+
+          var q =
+            normalize(
+              mapSearch.value
+            );
+
+
+          var any=false;
+
+
+          mapCats.forEach(
+            function(cat){
+
+              var catName =
+                normalize(
+                  cat.getAttribute(
+                    "data-cat"
+                  )
+                );
+
+
+              var catHit =
+                q &&
+                catName.indexOf(q)>-1;
+
+
+              var subHit=false;
+
+
+              cat.querySelectorAll(
+                ".map-sub"
+              ).forEach(
+                function(sub){
+
+                  var kw =
+                    normalize(
+                      sub.getAttribute(
+                        "data-kw"
+                      )
+                    );
+
+
+                  var text =
+                    normalize(
+                      sub.textContent
+                    );
+
+
+                  var hit =
+                    q &&
+                    (
+                      kw.indexOf(q)>-1 ||
+                      text.indexOf(q)>-1
+                    );
+
+
+                  sub.classList.toggle(
+                    "hit",
+                    hit
+                  );
+
+
+                  if(hit){
+
+                    subHit=true;
+
+                  }
+
+                }
+              );
+
+
+              cat.classList.toggle(
+                "hit",
+                !!(
+                  catHit ||
+                  subHit
+                )
+              );
+
+
+              cat.classList.toggle(
+                "dim",
+                !!(
+                  q &&
+                  !catHit &&
+                  !subHit
+                )
+              );
+
+
+              if(
+                subHit &&
+                !cat.classList.contains(
+                  "active"
+                )
+              ){
+
+                cat.classList.add(
+                  "active"
+                );
+
+
+                cat.querySelectorAll(
+                  ".map-sub"
+                ).forEach(
+                  function(sub){
+
+                    sub.classList.add(
+                      "visible"
+                    );
+
+                  }
+                );
+
+              }
+
+
+              if(
+                q &&
+                (
+                  catHit ||
+                  subHit
+                )
+              ){
+
+                any=true;
+
+              }
+
+            }
+          );
+
+
+          if(!q){
+
+            mapCats.forEach(
+              function(cat){
+
+                cat.classList.remove(
+                  "hit",
+                  "dim"
+                );
+
+              }
+            );
+
+
+            if(
+              crumbPath.length===0
+            ){
+
+              renderCrumb();
+
+
+              if(mapCats[0]){
+
+                showCat(
+                  mapCats[0]
+                );
+
+              }
+
+            }
+
+          }
+
+
+          if(
+            any &&
+            crumbPath.length===0
+          ){
+
+            mapCrumb.innerHTML="";
+
+
+            var tag =
+              document.createElement(
+                "span"
+              );
+
+
+            tag.className =
+              "crumb-note";
+
+
+            tag.textContent =
+              currentLang==="zh"
+              ? "搜索结果"
+              : "SEARCH RESULTS";
+
+
+            mapCrumb.appendChild(
+              tag
+            );
+
+          }else if(
+            !q &&
+            crumbPath.length===0
+          ){
+
+            renderCrumb();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    renderCrumb();
+
+
+    if(mapCats[0]){
+
+      showCat(
+        mapCats[0]
+      );
+
+    }
+
+
+    document.addEventListener(
+      "visibilitychange",
+      function(){
+
+        if(
+          document.visibilityState !==
+          "visible"
+        ){
+
+          return;
+
+        }
+
+      }
+    );
+
+  }
+
 
   /* ==========================================================
      INITIAL LANGUAGE
