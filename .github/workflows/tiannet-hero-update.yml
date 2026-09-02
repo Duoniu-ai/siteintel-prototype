@@ -1,0 +1,234 @@
+name: TIANNET Hero Update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/tiannet-hero-update.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch homepage
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          import subprocess
+
+          p = Path('website/openai.com/TIANNET 天网官网首页.html')
+          text = p.read_text(encoding='utf-8')
+          start_marker = '''  /* ==========================================================\n     HERO CANVAS INTELLIGENCE FIELD\n  ========================================================== */'''
+          end_marker = '''  /* ==========================================================\n     INITIAL LANGUAGE\n  ========================================================== */'''
+          start = text.find(start_marker)
+          end = text.find(end_marker, start)
+          if start < 0 or end < 0 or end <= start:
+              raise SystemExit('Hero Canvas block markers not found')
+
+          new_block = r'''  /* ==========================================================
+     HERO CANVAS INTELLIGENCE FIELD
+     Interactive TIANNET network field
+  ========================================================== */
+
+  (function(){
+    var fieldCanvas = document.getElementById('heroField');
+    if(!fieldCanvas) return;
+    var ctx = fieldCanvas.getContext('2d');
+    if(!ctx) return;
+
+    var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    var W=0, H=0, dpr=1;
+    var pointer={x:null,y:null};
+    var nodes=[];
+    var MAX_LINK_DISTANCE=135;
+    var POINTER_RADIUS=175;
+    var TYPES=['WEBSITE','DOMAIN','ENTITY','RELATION','IP','DNS','TECH','ASN','CERTIFICATE','INFRASTRUCTURE','PLATFORM','EVENT','DISCOVERY','INTELLIGENCE'];
+
+    function rnd(lo,hi){ return lo+Math.random()*(hi-lo); }
+
+    function nodeCount(){
+      if(W<700) return 44;
+      if(W<1100) return 70;
+      return Math.min(128,Math.max(76,Math.floor((W*H)/11000)));
+    }
+
+    function makeNode(){
+      return {
+        x:rnd(0,W), y:rnd(0,H),
+        vx:rnd(-.12,.12), vy:rnd(-.10,.10),
+        r:rnd(1.2,2.8), alpha:rnd(.20,.62),
+        pulse:rnd(0,Math.PI*2),
+        type:TYPES[Math.floor(Math.random()*TYPES.length)]
+      };
+    }
+
+    function seed(){
+      nodes=[];
+      for(var i=0;i<nodeCount();i++) nodes.push(makeNode());
+    }
+
+    function resize(){
+      var rect=fieldCanvas.getBoundingClientRect();
+      W=Math.max(rect.width,10);
+      H=Math.max(rect.height,10);
+      dpr=Math.min(window.devicePixelRatio||1,2);
+      fieldCanvas.width=Math.round(W*dpr);
+      fieldCanvas.height=Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      seed();
+      ctx.clearRect(0,0,W,H);
+    }
+
+    function updateNode(n){
+      n.x+=n.vx;
+      n.y+=n.vy;
+      n.pulse+=.012;
+      n.vx+=Math.sin(n.pulse)*.0008;
+      n.vy+=Math.cos(n.pulse*.8)*.0006;
+
+      if(pointer.x!==null&&pointer.y!==null){
+        var dx=n.x-pointer.x;
+        var dy=n.y-pointer.y;
+        var dist=Math.hypot(dx,dy);
+        if(dist>0&&dist<POINTER_RADIUS){
+          var force=(1-dist/POINTER_RADIUS)*.012;
+          n.vx+=(dx/dist)*force;
+          n.vy+=(dy/dist)*force;
+        }
+      }
+
+      n.vx*=.994;
+      n.vy*=.994;
+      if(n.x<-20) n.x=W+20;
+      if(n.x>W+20) n.x=-20;
+      if(n.y<-20) n.y=H+20;
+      if(n.y>H+20) n.y=-20;
+    }
+
+    function drawPointer(){
+      if(pointer.x===null||pointer.y===null) return;
+      var g=ctx.createRadialGradient(pointer.x,pointer.y,0,pointer.x,pointer.y,POINTER_RADIUS);
+      g.addColorStop(0,'rgba(59,130,246,.055)');
+      g.addColorStop(.35,'rgba(59,130,246,.022)');
+      g.addColorStop(1,'rgba(59,130,246,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath();
+      ctx.arc(pointer.x,pointer.y,POINTER_RADIUS,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    function drawLinks(){
+      for(var i=0;i<nodes.length;i++){
+        var a=nodes[i];
+        for(var j=i+1;j<nodes.length;j++){
+          var b=nodes[j];
+          var dx=a.x-b.x;
+          var dy=a.y-b.y;
+          var dist=Math.hypot(dx,dy);
+          if(dist>MAX_LINK_DISTANCE) continue;
+
+          var opacity=(1-dist/MAX_LINK_DISTANCE)*.13;
+          var boost=0;
+
+          if(pointer.x!==null&&pointer.y!==null){
+            var da=Math.hypot(a.x-pointer.x,a.y-pointer.y);
+            var db=Math.hypot(b.x-pointer.x,b.y-pointer.y);
+            if(da<POINTER_RADIUS||db<POINTER_RADIUS) boost=.24;
+          }
+
+          opacity=Math.min(.5,opacity+boost);
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y);
+          ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle='rgba(100,140,195,'+opacity.toFixed(3)+')';
+          ctx.lineWidth=boost>0?.85:.55;
+          ctx.stroke();
+        }
+      }
+    }
+
+    function drawNodes(){
+      for(var i=0;i<nodes.length;i++){
+        var n=nodes[i];
+        var radius=n.r*(1+Math.sin(n.pulse)*.12);
+        var blue=n.type==='DOMAIN'||n.type==='ENTITY'||n.type==='RELATION'||n.type==='DISCOVERY'||n.type==='INTELLIGENCE';
+        ctx.beginPath();
+        ctx.arc(n.x,n.y,radius,0,Math.PI*2);
+        ctx.fillStyle=blue?'rgba(96,165,250,'+n.alpha+')':'rgba(244,244,242,'+(n.alpha*.72)+')';
+        ctx.fill();
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      drawPointer();
+      drawLinks();
+      drawNodes();
+      if(reduce) return;
+      nodes.forEach(updateNode);
+      requestAnimationFrame(draw);
+    }
+
+    function move(e){
+      var rect=fieldCanvas.getBoundingClientRect();
+      pointer.x=e.clientX-rect.left;
+      pointer.y=e.clientY-rect.top;
+    }
+
+    function leave(){ pointer.x=null; pointer.y=null; }
+
+    fieldCanvas.addEventListener('pointermove',move,{passive:true});
+    fieldCanvas.addEventListener('pointerleave',leave,{passive:true});
+    window.addEventListener('resize',resize);
+
+    resize();
+    fieldCanvas.classList.add('on');
+
+    if(reduce){
+      draw();
+      return;
+    }
+
+    draw();
+  })();
+
+'''
+
+          text = text[:start] + new_block + text[end:]
+
+          for pat,name in [
+            (r'\n\s*<a\s+class="nav-cta"\s+href="#ecosystem"\s+data-i18n="nav\.enter"\s*>\s*进入天网\s*</a>\s*','desktop CTA'),
+            (r'\n\s*<a\s+class="mm-cta"\s+href="#ecosystem"\s+data-i18n="nav\.enter"\s*>\s*进入天网\s*→\s*</a>\s*','mobile CTA'),
+            (r'\n\s*\.nav-cta\{.*?\n\s*\}\n\s*\.nav-cta:hover\{.*?\n\s*\}\n','desktop CTA CSS'),
+            (r'\n\s*\.mobile-menu a\.mm-cta\{.*?\n\s*\}\n','mobile CTA CSS')
+          ]:
+              text,n=re.subn(pat,'\n',text,count=1,flags=re.S)
+              if n!=1:
+                  raise SystemExit(f'Expected one {name} removal, got {n}')
+
+          p.write_text(text,encoding='utf-8')
+
+          # Syntax-check every inline script after patching.
+          scripts=re.findall(r'<script\b[^>]*>(.*?)</script>',text,re.S|re.I)
+          check=Path('/tmp/tiannet-check.js')
+          check.write_text('\n\n'.join(scripts),encoding='utf-8')
+          subprocess.run(['node','--check',str(check)],check=True)
+
+      - name: Commit and remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .github/workflows/tiannet-hero-update.yml
+          git add -A
+          git commit -m 'Update TIANNET hero network field'
+          git push origin HEAD:main
